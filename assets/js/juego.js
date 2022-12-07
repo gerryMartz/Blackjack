@@ -6,7 +6,11 @@ let puntosJugador = 0;
 let puntosComputadora = 0;
 
 // Referencias HTML
+const btnStart = document.querySelector("#btnStart");
+const btnNewGame = document.querySelector("#btnNewGame");
 const btnRequestCard = document.querySelector("#btnRequestCard");
+const btnFinishGame = document.querySelector("#btnFinishGame");
+
 const puntosHTML = document.querySelectorAll("small");
 const contenedorCartasJugador = document.querySelector("#jugador-cartas");
 const contenedorCartasComputadora = document.querySelector("#computadora-cartas");
@@ -14,6 +18,7 @@ const contenedorCartasComputadora = document.querySelector("#computadora-cartas"
 
 // Esta función crea un deck aleatorio
 function crearDeck() {
+
     for (let index = 2; index <= 10; index++) {
         for (let tipo of tipos) {
             deck.push(index + tipo);
@@ -29,6 +34,7 @@ function crearDeck() {
     deck = _.shuffle(deck);
 
     return deck;
+
 }
 
 crearDeck();
@@ -71,22 +77,40 @@ function jugarTurnoComputadora(puntosAdversario) {
 
     } while ((puntosComputadora < puntosAdversario) && (puntosAdversario <= 21));
 
-}
+    setTimeout(() => {
+        if ((puntosJugador <= 21) && (puntosComputadora > 21)) alert(`Has ganado ${nombreCap}!!`);
 
-function comprobarGanador(puntosJugadorA, puntosJugadorB) {
-
-    if (puntosJugadorA === 21 && puntosJugadorB > 21) {
-        console.log("Has ganado!!");
-        console.log("Perdió la computadora!")
-    } else if (puntosJugadorA > 21) {
-        console.warn("Perdiste. Gana la computadora")
-    } else if ((puntosJugadorA === 21) && (puntosJugadorB === 21)) console.log("Empate!!!");
+        else if (
+            (puntosJugador > 21) ||
+            ((puntosJugador < 21) && (puntosComputadora > puntosJugador))
+        ) alert(`Perdiste, ${nombreCap} :(`);
+    
+        else if ((puntosJugador === puntosComputadora)) alert("Empate!!"); 
+    }, 300);
 
 }
 
 // EVENTOS
+btnStart.addEventListener("click", () => {
+
+    btnStart.setAttribute("disabled", "");
+    btnRequestCard.removeAttribute("disabled");
+
+    let nombre = prompt("Ingresa tu nombre: ").trim();
+
+    while (nombre === "") {
+        nombre = prompt("Por favor, ingresa tu nombre:").trim();
+    }
+
+    nombreCap = nombre.charAt(0).toUpperCase() + nombre.substring(1, nombre.length);
+
+    alert(`Bienvenid@ ${nombreCap}!!`);
+
+});
+
 btnRequestCard.addEventListener("click", () => {
 
+    btnFinishGame.removeAttribute("disabled");
     const cartaAleatoria = obtenerCarta();
 
     puntosJugador += obtenerPuntosCarta(cartaAleatoria);
@@ -99,13 +123,53 @@ btnRequestCard.addEventListener("click", () => {
     contenedorCartasJugador.appendChild(imgCarta);
 
     if (puntosJugador > 21) {
+
         btnRequestCard.setAttribute("disabled", "");
+        btnFinishGame.setAttribute("disabled", "");
+
+        btnNewGame.removeAttribute("disabled");
+
         jugarTurnoComputadora(puntosJugador);
+
     } else if (puntosJugador === 21) {
+
         btnRequestCard.setAttribute("disabled", "");
+        btnFinishGame.setAttribute("disabled", "");
+
+        btnNewGame.removeAttribute("disabled");
+
         jugarTurnoComputadora(puntosJugador);
+        
     }
 
-    comprobarGanador(puntosJugador, puntosComputadora);
+});
+
+btnFinishGame.addEventListener("click", () => {
+    
+    btnNewGame.removeAttribute("disabled");
+
+    btnFinishGame.setAttribute("disabled", "");
+    btnRequestCard.setAttribute("disabled", "");
+    
+    jugarTurnoComputadora(puntosJugador);
+
+});
+
+btnNewGame.addEventListener("click", () => {
+
+    deck = [];
+    crearDeck();
+
+    puntosHTML.item(0).innerText = 0;
+    puntosHTML.item(1).innerText = 0;
+
+    puntosJugador = 0;
+    puntosComputadora = 0;
+
+    btnNewGame.setAttribute("disabled", "");
+    btnRequestCard.removeAttribute("disabled");
+
+    contenedorCartasJugador.replaceChildren();
+    contenedorCartasComputadora.replaceChildren();
 
 });

@@ -18,11 +18,17 @@
         </header>
 
         <section class="row mt-4 justify-content-center">
-            <div class="col-auto p-0" id="group-buttons">
-                <button id="btnNewGame" type="button" class="btn btn-primary btn-lg mx-2">Nuevo Juego</button>
-                <button id="btnRequestCard" type="button" class="btn btn-light btn-lg mx-2">Solicitar Carta</button>
-                <button id="btnFinishGame" type="button" class="btn btn-danger btn-lg mx-2">Terminar Juego</button>
+
+            <div class="col-auto p-0 d-flex flex-column flex-md-row gap-3" id="group-buttons">
+                <button id="btnStart" type="button" class="d-block d-md-inline-block btn btn-secondary btn-lg mx-2">Empezar</button>
+
+                <button id="btnNewGame" type="button" class="d-block d-md-inline-block btn btn-primary btn-lg mx-2" disabled>Nuevo Juego</button>
+
+                <button id="btnRequestCard" type="button" class="d-block d-md-inline-block btn btn-light btn-lg mx-2" disabled>Solicitar Carta</button>
+
+                <button id="btnFinishGame" type="button" class="d-block d-md-inline-block btn btn-danger btn-lg mx-2" disabled>Terminar Juego</button>
             </div>
+
         </section>
 
         <section class="row mt-5">
@@ -33,7 +39,7 @@
             </div>
         </section>
 
-        <section class="row mt-5">
+        <section class="row my-5">
             <div class="col px-5">
                 <h1>Computadora - <small>0</small> pts</h1>
 
